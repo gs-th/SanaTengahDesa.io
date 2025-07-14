@@ -1,0 +1,2311 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Selamat Datang di Desa Sana Tengah</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2e7d32;
+            --secondary: #fbc02d;
+            --accent: #388e3c;
+            --light: #f5f5f5;
+            --dark: #424242;
+            --text: #333;
+            --text-light: #757575;
+            --card-bg: #ffffff;
+        }
+        /* --- Sky Animation Styles --- */
+        header {
+            position: relative;
+            overflow: hidden;
+            padding: 0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            height: 180px;
+        }
+        .sky {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            transition: background 2s ease-in-out;
+        }
+        .sky.morning { background: linear-gradient(to bottom, #ff9966, #ff5e62); }
+        .sky.noon { background: linear-gradient(to bottom, #87CEEB, #E0F7FA); }
+        .sky.afternoon { background: linear-gradient(to bottom, #1e90ff, #70a1ff); }
+        .sky.evening { background: linear-gradient(to bottom, #ff7e5f, #feb47b); }
+        .sky.night { background: linear-gradient(to bottom, #0f2027, #203a43, #2c5364); }
+        .sun-moon-container {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+        .sun, .moon {
+            position: absolute;
+            border-radius: 50%;
+            transition: all 1.5s ease-in-out;
+        }
+        .sun {
+            width: 70px;
+            height: 70px;
+            background: radial-gradient(circle, #fff700 60%, #ffcc00 80%, #ff9900 100%);
+            box-shadow:
+                0 0 40px 20px #fff70088,
+                0 0 80px 40px #ffe08255,
+                0 0 120px 60px #fffde788;
+            z-index: 2;
+            left: 0;
+            top: 0;
+            opacity: 1;
+        }
+        .sun-aura {
+            position: absolute;
+            width: 180px;
+            height: 180px;
+            background: radial-gradient(circle, rgba(255, 255, 0, 0.18), transparent 80%);
+            border-radius: 50%;
+            top: -55px;
+            left: -55px;
+            animation: sun-pulse 3s infinite alternate, sun-rotate 10s linear infinite;
+            pointer-events: none;
+        }
+        @keyframes sun-pulse {
+            0% { opacity: 0.7; transform: scale(1);}
+            100% { opacity: 1; transform: scale(1.12);}
+        }
+        @keyframes sun-rotate {
+            0% { transform: rotate(0deg);}
+            100% { transform: rotate(360deg);}
+        }
+
+        .moon {
+            width: 60px;
+            height: 60px;
+            background: radial-gradient(circle, #f8f8ff 70%, #b0c4de 100%);
+            box-shadow:
+                0 0 30px 10px #e0eaff,
+                0 0 60px 30px #b0c4de55;
+            opacity: 0;
+            z-index: 2;
+            left: 0;
+            top: 0;
+            transition: all 1.5s cubic-bezier(.4,1,.7,1);
+        }
+        .moon-aura {
+            position: absolute;
+            width: 120px;
+            height: 120px;
+            background: radial-gradient(circle, rgba(200,220,255,0.18), transparent 80%);
+            border-radius: 50%;
+            top: -30px;
+            left: -30px;
+            animation: moon-pulse 4s infinite alternate;
+            pointer-events: none;
+        }
+        @keyframes moon-pulse {
+            0% { opacity: 0.5; transform: scale(1);}
+            100% { opacity: 0.8; transform: scale(1.08);}
+        }
+
+        /* Cumulonimbus Cloud */
+        .cloud {
+            position: absolute;
+            background: rgba(255,255,255,0.92);
+            border-radius: 50%;
+            filter: blur(2px);
+            animation: cloud-move linear infinite, cloud-bounce 7s ease-in-out infinite;
+            z-index: 1;
+            box-shadow:
+                30px 10px 40px 0px #b0b0b0aa,
+                0 0 60px 10px #e0e0e0cc;
+        }
+        .cloud::before, .cloud::after {
+            content: '';
+            position: absolute;
+            background: rgba(255,255,255,0.95);
+            border-radius: 50%;
+            filter: blur(2.5px);
+        }
+        .cloud::before {
+            width: 70%;
+            height: 60%;
+            left: -35%;
+            top: 10%;
+            box-shadow: 20px 0 30px 0 #b0b0b044;
+        }
+        .cloud::after {
+            width: 60%;
+            height: 50%;
+            right: -30%;
+            top: 25%;
+            box-shadow: 10px 0 20px 0 #b0b0b044;
+        }
+        @keyframes cloud-bounce {
+            0%, 100% { transform: translateY(0);}
+            50% { transform: translateY(-12px);}
+        }
+        @keyframes cloud-move {
+            0% { left: -20vw; }
+            100% { left: 120vw; }
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 0.6; }
+            100% { transform: scale(1.05); opacity: 0.8; }
+        }
+        .header-content {
+            position: relative;
+            z-index: 3;
+            padding: 1.5rem 0;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0,0,0,0.2);
+        }
+        .logo {
+            width: 72px;
+            height: 72px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255,255,255,0.95);
+            border-radius: 50%;
+            border: 4px solid #fbc02d; /* kuning */
+            margin-bottom: 12px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+        }
+        .logo i {
+            font-size: 2.5rem;
+            color: var(--primary);
+        }
+        .designer-ticker {
+            position: relative;
+            z-index: 10;
+        }
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        .search-container {
+            margin: 2rem auto;
+            width: 100%;
+            max-width: 600px;
+            position: relative;
+        }
+        .search-box {
+            width: 100%;
+            padding: 1rem 1.5rem;
+            border-radius: 50px;
+            border: none;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            font-size: 1rem;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+        .search-box:focus {
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+            border: 1px solid var(--secondary);
+        }
+        .search-btn {
+            position: absolute;
+            right: 5px;
+            top: 5px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .search-btn:hover {
+            background: var(--accent);
+            transform: scale(1.05);
+        }
+        .map-container {
+            width: 100%;
+            max-width: 1200px;
+            height: 500px;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            margin: 0 auto 2rem auto;
+            position: relative;
+            border: 3px solid #f6fa03;
+        }
+        #map {
+            width: 100%;
+            height: 100%;
+        }
+        .map-overlay {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            z-index: 1000;
+            background: white;
+            padding: 10px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        .map-controls {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .map-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 8px 12px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: all 0.3s ease;
+        }
+        .map-btn:hover {
+            background: var(--accent);
+            transform: translateY(-2px);
+        }
+        .section-title {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: var(--primary);
+            position: relative;
+            padding-bottom: 10px;
+        }
+        .section-title:after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background: var(--secondary);
+            border-radius: 3px;
+        }
+        .destinations {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+        .destination-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+            border-top: 4px solid var(--secondary);
+        }
+        .destination-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        .card-image {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+        .destination-card:hover .card-image {
+            transform: scale(1.03);
+        }
+        .card-content {
+            padding: 1.5rem;
+        }
+        .card-title {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+            color: var(--primary);
+        }
+        .card-location {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            color: var(--text-light);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+        .card-location i {
+            color: var(--accent);
+        }
+        .card-description {
+            font-size: 0.9rem;
+            margin-bottom: 1.5rem;
+            color: var(--text-light);
+        }
+        .card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .visitor-section {
+            display: flex;
+            justify-content: center;
+            margin: 3rem 0;
+        }
+        .visitor-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            width: 100%;
+            max-width: 500px;
+            border-top: 4px solid var(--secondary);
+        }
+        .visitor-title {
+            font-size: 1.3rem;
+            margin-bottom: 1.5rem;
+            color: var(--primary);
+            text-align: center;
+            position: relative;
+            padding-bottom: 10px;
+        }
+        .visitor-title:after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 2px;
+            background: var(--secondary);
+        }
+        .visitor-form {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.2rem;
+        }
+        .form-group {
+            margin-bottom: 0.5rem;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 0.3rem;
+            font-size: 0.9rem;
+            color: var(--text-light);
+            font-weight: 500;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 0.6rem 0.8rem;
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            background-color: #fafafa;
+            color: var(--dark);
+        }
+        .qr-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            text-align: center;
+            margin-left: 2rem;
+            width: 280px;
+            border-top: 4px solid var(--secondary);
+        }
+        .qr-title {
+            font-size: 1.3rem;
+            margin-bottom: 1.5rem;
+            color: var(--primary);
+            position: relative;
+            padding-bottom: 10px;
+        }
+        .qr-title:after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 2px;
+            background: var(--secondary);
+        }
+        .qr-code {
+            width: 200px;
+            height: 200px;
+            margin: 0 auto;
+            background: #f5f5f5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+            border-radius: 8px;
+            border: 1px dashed var(--text-light);
+        }
+        .qr-code i {
+            font-size: 5rem;
+            color: var(--dark);
+        }
+        .qr-desc {
+            font-size: 0.85rem;
+            color: var(--text-light);
+            line-height: 1.5;
+        }
+        footer {
+            background: var(--dark);
+            color: white;
+            padding: 2rem 0;
+            text-align: center;
+            margin-top: 3rem;
+        }
+        .footer-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+        .social-link {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            transition: all 0.3s ease;
+        }
+        .social-link:hover {
+            background: var(--secondary);
+            color: var(--dark);
+            transform: translateY(-3px);
+        }
+        .copyright {
+            font-size: 0.9rem;
+            opacity: 0.7;
+            margin-top: 1rem;
+        }
+        @media (max-width: 768px) {
+            h1 { font-size: 1.5rem; }
+            .subtitle { font-size: 0.9rem; }
+            .map-container { height: 400px; }
+            .destinations { grid-template-columns: 1fr; }
+            .map-overlay { top: auto; bottom: 10px; right: 10px; }
+            .map-controls { flex-direction: row; }
+            .visitor-section { flex-direction: column; align-items: center; }
+            .visitor-card { margin-bottom: 2rem; }
+            .qr-card { margin-left: 0; }
+            .visitor-form { grid-template-columns: 1fr; }
+        }
+        .sidebar {
+            position: fixed;
+            top: 0; left: -260px;
+            width: 240px;
+            height: 100%;
+            background: #fff;
+            box-shadow: 2px 0 16px rgba(0,0,0,0.12);
+            z-index: 9999;
+            padding-top: 60px;
+            transition: left 0.3s cubic-bezier(.4,1,.7,1);
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .sidebar.open {
+            left: 0;
+        }
+        .sidebar .close-btn {
+            position: absolute;
+            top: 12px; right: 16px;
+            background: none;
+            border: none;
+            font-size: 2rem;
+            color: #fbc02d;
+            cursor: pointer;
+        }
+        .sidebar a {
+            padding: 14px 28px;
+            color: #2e7d32;
+            text-decoration: none;
+            font-size: 1.1rem;
+            border-radius: 6px;
+            transition: background 0.2s;
+            font-weight: 500;
+        }
+        .sidebar a:hover {
+            background: #f5f5f5;
+            color: #388e3c;
+        }
+
+        /* Hamburger styles */
+        .hamburger {
+            position: absolute;
+            top: 18px; left: 18px;
+            width: 38px; height: 38px;
+            background: rgba(255,255,255,0.95);
+            border: 2px solid #fbc02d;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 6px;
+            z-index: 10001;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        .hamburger span {
+            display: block;
+            height: 4px;
+            width: 22px;
+            background: #2e7d32;
+            border-radius: 2px;
+            margin: 0 auto;
+            transition: all 0.3s;
+        }
+        @media (max-width: 768px) {
+            .sidebar { width: 80vw; min-width: 180px; }
+            .hamburger { top: 12px; left: 12px; }
+        }
+        /* --- End Existing Styles --- */
+        .shine-text {
+            position: relative;
+            display: inline-block;
+            background: linear-gradient(
+                90deg,
+                #fff 0%,
+                #fff 35%,
+                #ffe082 45%,
+                #fffbe7 48%,
+                #fff 52%,
+                #ffe082 55%,
+                #fff 65%,
+                #fff 100%
+            );
+            background-size: 300% auto;
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            -webkit-text-fill-color: transparent;
+            animation: shine-move 2.5s cubic-bezier(.4,1,.7,1) infinite;
+            filter: drop-shadow(0 0 8px #ffe082) drop-shadow(0 0 16px #fffbe7);
+        }
+        @keyframes shine-move {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+        /* Tambahkan di bagian style */
+        #arsip-modal .archive-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+
+        #arsip-modal .card-header img,
+        #arsip-modal .card-header video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s;
+        }
+
+        #arsip-modal .archive-card:hover .card-header img,
+        #arsip-modal .archive-card:hover .card-header video {
+            transform: scale(1.05);
+        }
+
+        #arsip-modal .tab {
+            transition: all 0.3s ease;
+        }
+
+        #arsip-modal .tab:hover:not(.active) {
+            color: #166088;
+            border-bottom: 3px solid #dee2e6;
+        }
+
+        #arsip-modal .btn-primary:hover {
+            background-color: #166088;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        #arsip-modal .btn-action:hover {
+            color: white;
+        }
+
+        #arsip-modal .btn-download:hover {
+            background-color: #28a745;
+        }
+
+        #arsip-modal .btn-edit:hover {
+            background-color: #ffc107;
+        }
+
+        #arsip-modal .btn-delete:hover {
+            background-color: #dc3545;
+        }
+
+        @media (max-width: 768px) {
+            #arsip-modal .archive-grid {
+                grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            }
+            
+            #arsip-modal .action-bar {
+                flex-direction: column;
+            }
+            
+            #arsip-modal .search-bar {
+                width: 100%;
+                margin-bottom: 15px;
+            }
+            
+            #arsip-modal .btn {
+                width: 100%;
+            }
+        }
+
+    </style>
+</head>
+<body>
+    <header>
+        <div id="sidebar" class="sidebar">
+            <button class="close-btn" onclick="toggleSidebar()">&times;</button>
+            <a href="#login-admin" onclick="toggleSidebar()">Login Admin</a>
+            <a href="#" onclick="showGeografisModal();toggleSidebar();">Informasi Geografis</a>
+            <a href="#" onclick="showArsipModal();toggleSidebar();" id="arsip-desa-btn" style="display:flex;align-items:center;gap:10px;padding:12px 24px;font-weight:500;color:#4a6fa5;">
+                <i class="fas fa-archive" style="font-size:1.2rem;color:#4a6fa5;"></i>
+                <span>Arsip Desa</span>
+            </a>
+        </div>
+        <script>
+        // Fungsi untuk membuka modal informasi geografis
+        function showGeografisModal() {
+            document.getElementById('geografis-modal').style.display = 'flex';
+        }
+        function closeGeografisModal() {
+            document.getElementById('geografis-modal').style.display = 'none';
+        }
+        </script>
+        <!-- Modal Arsip Desa -->
+        <div id="arsip-modal" style="display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:99999;background:rgba(0,0,0,0.45);align-items:center;justify-content:center;">
+            <div style="background:#fff;border-radius:12px;max-width:900px;width:98vw;max-height:96vh;overflow-y:auto;box-shadow:0 8px 32px rgba(0,0,0,0.18);position:relative;">
+                <button onclick="closeArsipModal()" style="position:absolute;top:12px;right:18px;font-size:2rem;background:none;border:none;color:#e74c3c;cursor:pointer;z-index:10;">&times;</button>
+                <!-- Konten Arsip Desa -->
+                <div style="padding:32px 18px 18px 18px;">
+                    <h1 style="color:#2c3e50;text-align:center;margin-bottom:20px;">Arsip Desa Digital</h1>
+                    
+                    <div class="tabs" style="display:flex;margin-bottom:25px;border-bottom:1px solid #e0e0e0;">
+                        <div class="tab active" style="padding:12px 20px;cursor:pointer;font-weight:500;color:#4a6fa5;border-bottom:3px solid #4a6fa5;">Semua Arsip</div>
+                        <div class="tab" style="padding:12px 20px;cursor:pointer;font-weight:500;color:#6c757d;border-bottom:3px solid transparent;">Berkas</div>
+                        <div class="tab" style="padding:12px 20px;cursor:pointer;font-weight:500;color:#6c757d;border-bottom:3px solid transparent;">Foto</div>
+                        <div class="tab" style="padding:12px 20px;cursor:pointer;font-weight:500;color:#6c757d;border-bottom:3px solid transparent;">Video</div>
+                    </div>
+
+                    <div class="action-bar" style="display:flex;justify-content:space-between;margin-bottom:20px;">
+                        <div class="search-bar" style="position:relative;width:300px;">
+                            <i class="fas fa-search" style="position:absolute;left:15px;top:50%;transform:translateY(-50%);color:#6c757d;"></i>
+                            <input type="text" placeholder="Cari arsip..." style="width:100%;padding:10px 15px 10px 40px;border:1px solid #ddd;border-radius:30px;outline:none;">
+                        </div>
+                        <button class="btn btn-primary" id="arsip-upload-btn" style="padding:10px 20px;border:none;border-radius:30px;background:#4a6fa5;color:white;font-weight:500;cursor:pointer;display:inline-flex;align-items:center;">
+                            <i class="fas fa-plus" style="margin-right:8px;"></i> Tambah Arsip
+                        </button>
+                        <input type="file" id="arsip-file-input" style="display:none;" />
+                    </div>
+                    <!-- Ganti seluruh isi archive-grid dan script arsip desa dengan kode berikut -->
+
+                    <div class="archive-grid" id="arsip-list" style="display:grid;grid-template-columns:repeat(auto-fill, minmax(280px, 1fr));gap:20px;">
+                        <!-- Card akan muncul di sini setelah tambah arsip -->
+                    </div>
+
+                    <script>
+                    // Data arsip desa (disimpan di localStorage agar tetap ada setelah refresh)
+                    function loadArsipData() {
+                        return JSON.parse(localStorage.getItem('arsipData') || '[]');
+                    }
+                    function saveArsipData(data) {
+                        localStorage.setItem('arsipData', JSON.stringify(data));
+                    }
+                    let arsipData = loadArsipData();
+
+                    // Render arsip ke archive-grid
+                    function renderArsip(filter = "semua arsip", search = "") {
+                        const grid = document.getElementById('arsip-list');
+                        grid.innerHTML = "";
+                        let filtered = arsipData.filter(item => {
+                            let cocokTab = filter === "semua arsip" || item.type.toLowerCase() === filter;
+                            let cocokCari = item.title.toLowerCase().includes(search);
+                            return cocokTab && cocokCari;
+                        });
+                        if (filtered.length === 0) {
+                            grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;color:#aaa;padding:40px 0;">Tidak ada arsip ditemukan.</div>`;
+                            return;
+                        }
+                        filtered.forEach(item => {
+                            let card = document.createElement('div');
+                            card.className = "archive-card";
+                            card.style = "background-color:white;border-radius:10px;overflow:hidden;box-shadow:0 4px 6px rgba(0,0,0,0.05);transition:all 0.3s ease;position:relative;";
+                            let header = "";
+                            if (item.type === "Foto") {
+                                header = `<div class="card-header" style="height:160px;overflow:hidden;position:relative;">
+                                    <img src="${item.src}" alt="${item.title}" style="width:100%;height:100%;object-fit:cover;transition:transform 0.5s;">
+                                    <div class="file-type" style="position:absolute;top:10px;right:10px;background-color:rgba(0,0,0,0.7);color:white;padding:5px 10px;border-radius:20px;font-size:12px;">${item.type}</div>
+                                </div>`;
+                            } else if (item.type === "Video") {
+                                header = `<div class="card-header" style="height:160px;overflow:hidden;position:relative;">
+                                    <video poster="${item.poster || ''}" controls style="width:100%;height:100%;object-fit:cover;transition:transform 0.5s;">
+                                        <source src="${item.src}" type="video/mp4">
+                                    </video>
+                                    <div class="file-type" style="position:absolute;top:10px;right:10px;background-color:rgba(0,0,0,0.7);color:white;padding:5px 10px;border-radius:20px;font-size:12px;">${item.type}</div>
+                                </div>`;
+                            } else {
+                                header = `<div class="card-header" style="height:160px;overflow:hidden;position:relative;">
+                                    <div class="file-icon" style="display:flex;align-items:center;justify-content:center;height:100%;background-color:#f0f4f8;">
+                                        <i class="fas ${item.icon || 'fa-file'}" style="font-size:60px;color:#4a6fa5;"></i>
+                                    </div>
+                                    <div class="file-type" style="position:absolute;top:10px;right:10px;background-color:rgba(0,0,0,0.7);color:white;padding:5px 10px;border-radius:20px;font-size:12px;">${item.type}</div>
+                                </div>`;
+                            }
+                            card.innerHTML = `
+                                ${header}
+                                <div class="card-body" style="padding:15px;">
+                                    <h3 class="card-title" style="font-weight:600;margin-bottom:8px;color:#343a40;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${item.title}</h3>
+                                    <div class="card-meta" style="display:flex;justify-content:space-between;font-size:12px;color:#6c757d;margin-bottom:15px;">
+                                        <span><i class="far fa-calendar-alt"></i> ${new Date(item.date).toLocaleDateString('id-ID')}</span>
+                                        <span><i class="far fa-file"></i> ${item.size}</span>
+                                    </div>
+                                    <div class="card-actions" style="display:flex;justify-content:space-between;border-top:1px solid #eee;padding-top:15px;">
+                                        <button class="btn-action btn-download" data-id="${item.id}" style="padding:6px 12px;border-radius:5px;font-size:13px;display:inline-flex;align-items:center;background-color:rgba(40,167,69,0.1);color:#28a745;">
+                                            <i class="fas fa-download" style="margin-right:5px;"></i> Unduh
+                                        </button>
+                                        <button class="btn-action btn-edit" data-id="${item.id}" style="padding:6px 12px;border-radius:5px;font-size:13px;display:inline-flex;align-items:center;background-color:rgba(255,193,7,0.1);color:#ffc107;">
+                                            <i class="fas fa-edit" style="margin-right:5px;"></i> Edit
+                                        </button>
+                                        <button class="btn-action btn-delete" data-id="${item.id}" style="padding:6px 12px;border-radius:5px;font-size:13px;display:inline-flex;align-items:center;background-color:rgba(220,53,69,0.1);color:#dc3545;">
+                                            <i class="fas fa-trash" style="margin-right:5px;"></i> Hapus
+                                        </button>
+                                    </div>
+                                </div>
+                            `;
+                            grid.appendChild(card);
+                        });
+                        
+                        // Event tombol
+                        grid.querySelectorAll('.btn-download').forEach(btn => {
+                            btn.onclick = function() {
+                                const id = +btn.getAttribute('data-id');
+                                const arsip = arsipData.find(a => a.id === id);
+                                if (arsip && arsip.src) {
+                                    window.open(arsip.src, '_blank');
+                                } else {
+                                    alert('File tidak tersedia untuk diunduh.');
+                                }
+                            };
+                        });
+                        grid.querySelectorAll('.btn-edit').forEach(btn => {
+                            btn.onclick = function() {
+                                const id = +btn.getAttribute('data-id');
+                                const arsip = arsipData.find(a => a.id === id);
+                                if (!arsip) return;
+                                const newTitle = prompt('Edit judul arsip:', arsip.title);
+                                if (!newTitle) return;
+                                arsip.title = newTitle;
+                                const newSize = prompt('Edit ukuran file:', arsip.size);
+                                if (newSize) arsip.size = newSize;
+                                saveArsipData(arsipData);
+                                renderArsip(currentTab, currentSearch);
+                            };
+                        });
+                        grid.querySelectorAll('.btn-delete').forEach(btn => {
+                            btn.onclick = function() {
+                                const id = +btn.getAttribute('data-id');
+                                if (confirm('Yakin ingin menghapus arsip ini?')) {
+                                    arsipData = arsipData.filter(a => a.id !== id);
+                                    saveArsipData(arsipData);
+                                    renderArsip(currentTab, currentSearch);
+                                }
+                            };
+                        });
+                    }
+
+                    // Tab & Search
+                    let currentTab = "semua arsip";
+                    let currentSearch = "";
+                    document.querySelectorAll('#arsip-modal .tab').forEach(tab => {
+                        tab.onclick = function() {
+                            document.querySelectorAll('#arsip-modal .tab').forEach(t => t.classList.remove('active'));
+                            tab.classList.add('active');
+                            currentTab = tab.textContent.trim().toLowerCase();
+                            renderArsip(currentTab, currentSearch);
+                        };
+                    });
+                    document.querySelector('#arsip-modal .search-bar input').addEventListener('input', function() {
+                        currentSearch = this.value.trim().toLowerCase();
+                        renderArsip(currentTab, currentSearch);
+                    });
+
+                    // Tambah Arsip: buka file lokal
+                    document.getElementById('arsip-upload-btn').onclick = function() {
+                        document.getElementById('arsip-file-input').value = '';
+                        document.getElementById('arsip-file-input').click();
+                    };
+
+                    document.getElementById('arsip-file-input').addEventListener('change', function(e) {
+                        const file = e.target.files[0];
+                        if (!file) return;
+                        const reader = new FileReader();
+                        reader.onload = function(evt) {
+                            let type = "Berkas";
+                            let icon = "fa-file-alt";
+                            let src = "";
+                            let poster = "";
+                            if (file.type.startsWith("image/")) {
+                                type = "Foto";
+                                src = evt.target.result;
+                                icon = "fa-file-image";
+                            } else if (file.type.startsWith("video/")) {
+                                type = "Video";
+                                src = evt.target.result;
+                                icon = "fa-file-video";
+                            } else if (file.type === "application/pdf") {
+                                type = "PDF";
+                                icon = "fa-file-pdf";
+                            }
+                            const title = file.name;
+                            const size = (file.size / 1024 / 1024).toFixed(2) + " MB";
+                            const date = new Date().toISOString().slice(0,10);
+                            arsipData.push({
+                                id: Date.now(),
+                                type,
+                                title,
+                                date,
+                                size,
+                                src,
+                                icon,
+                                poster
+                            });
+                            saveArsipData(arsipData);
+                            renderArsip(currentTab, currentSearch);
+                        };
+                        if (file.type.startsWith("image/") || file.type.startsWith("video/")) {
+                            reader.readAsDataURL(file);
+                        } else {
+                            // For PDF or other, just save file name and icon, no preview
+                            reader.onloadend = function() {
+                                let type = "Berkas";
+                                let icon = "fa-file-alt";
+                                if (file.type === "application/pdf") {
+                                    type = "PDF";
+                                    icon = "fa-file-pdf";
+                                }
+                                const title = file.name;
+                                const size = (file.size / 1024 / 1024).toFixed(2) + " MB";
+                                const date = new Date().toISOString().slice(0,10);
+                                arsipData.push({
+                                    id: Date.now(),
+                                    type,
+                                    title,
+                                    date,
+                                    size,
+                                    src: "",
+                                    icon,
+                                    poster: ""
+                                });
+                                saveArsipData(arsipData);
+                                renderArsip(currentTab, currentSearch);
+                            };
+                            reader.readAsArrayBuffer(file);
+                        }
+                    });
+
+                    // Render awal
+                    renderArsip();
+                    </script>
+                </div>
+            </div>
+        </div>
+        
+        <script>
+        // Fungsi untuk membuka dan menutup modal arsip
+        function showArsipModal() {
+            document.getElementById('arsip-modal').style.display = 'flex';
+        }
+        function closeArsipModal() {
+            document.getElementById('arsip-modal').style.display = 'none';
+        }
+
+        // Semua fungsi arsip desa dalam satu event DOMContentLoaded
+        document.addEventListener('DOMContentLoaded', function() {
+            // Tab filter functionality
+            const tabs = document.querySelectorAll('#arsip-modal .tab');
+            const cards = document.querySelectorAll('#arsip-modal .archive-card');
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    tabs.forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+                    const filter = tab.textContent.trim().toLowerCase();
+                    cards.forEach(card => {
+                        const type = card.querySelector('.file-type').textContent.trim().toLowerCase();
+                        if (filter === 'semua arsip' || type === filter) {
+                            card.style.display = '';
+                        } else {
+                            card.style.display = 'none';
+                        }
+                    });
+                });
+            });
+
+
+            // Search filter
+            const searchInput = document.querySelector('#arsip-modal .search-bar input');
+            if (searchInput) {
+                searchInput.addEventListener('input', function() {
+                    const val = this.value.trim().toLowerCase();
+                    cards.forEach(card => {
+                        const title = card.querySelector('.card-title');
+                        if (title && title.textContent.toLowerCase().includes(val)) {
+                            card.style.display = '';
+                        } else {
+                            card.style.display = 'none';
+                        }
+                    });
+                });
+            }
+        });
+    </script>
+        <!-- Modal Informasi Geografis & Cuaca -->
+        <div id="geografis-modal" style="display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:99999;background:rgba(0,0,0,0.45);align-items:center;justify-content:center;">
+            <div style="background:#fff;border-radius:12px;max-width:900px;width:98vw;max-height:96vh;overflow-y:auto;box-shadow:0 8px 32px rgba(0,0,0,0.18);position:relative;">
+                <button onclick="closeGeografisModal()" style="position:absolute;top:12px;right:18px;font-size:2rem;background:none;border:none;color:#e74c3c;cursor:pointer;z-index:10;">&times;</button>
+                <!-- Konten Informasi Geografis & Cuaca -->
+                <div style="padding:32px 18px 18px 18px;">
+                    <!-- Mulai: Konten dari file Informasi Geografis & Cuaca -->
+                    <h1 style="color:#2c3e50;text-align:center;margin-bottom:10px;">Informasi Geografis & Cuaca</h1>
+                    <div style="display:flex;justify-content:center;align-items:center;gap:10px;margin-bottom:15px;">
+                        <i class="fas fa-map-marker-alt" style="color:#3498db;font-size:1.2rem;"></i>
+                        <span id="location-name-modal">Madura, Jawa Timur, Indonesia</span>
+                    </div>
+                    <div style="font-size:0.9rem;color:#95a5a6;text-align:center;margin-bottom:18px;">
+                        Terakhir diperbarui: <span id="update-time-modal">Memuat...</span>
+                    </div>
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:24px;">
+                        <div style="background:#fff;border-radius:10px;padding:18px;box-shadow:0 4px 6px rgba(0,0,0,0.08);">
+                            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid #eee;">
+                                <span style="font-size:1.1rem;color:#2c3e50;font-weight:600;">Cuaca Hari Ini</span>
+                                <i class="fas fa-sun" style="font-size:1.3rem;color:#3498db;"></i>
+                            </div>
+                            <div style="display:flex;flex-direction:column;align-items:center;text-align:center;">
+                                <i class="fas fa-cloud-sun" id="current-weather-icon-modal" style="font-size:3rem;margin:12px 0;color:#f39c12;"></i>
+                                <div id="current-temp-modal" style="font-size:2.2rem;font-weight:bold;color:#2c3e50;margin-bottom:8px;">27°C</div>
+                                <div id="weather-desc-modal" style="color:#95a5a6;margin-bottom:10px;">Berawan</div>
+                                <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;width:100%;">
+                                    <div style="display:flex;align-items:center;gap:8px;">
+                                        <i class="fas fa-tint" style="font-size:1rem;color:#3498db;"></i>
+                                        <div>
+                                            <div id="current-humidity-modal" style="font-weight:600;">78%</div>
+                                            <div style="font-size:0.95rem;">Kelembapan</div>
+                                        </div>
+                                    </div>
+                                    <div style="display:flex;align-items:center;gap:8px;">
+                                        <i class="fas fa-wind" style="font-size:1rem;color:#3498db;"></i>
+                                        <div>
+                                            <div id="current-wind-modal" style="font-weight:600;">12 km/jam</div>
+                                            <div style="font-size:0.95rem;">Angin</div>
+                                        </div>
+                                    </div>
+                                    <div style="display:flex;align-items:center;gap:8px;">
+                                        <i class="fas fa-cloud-rain" style="font-size:1rem;color:#3498db;"></i>
+                                        <div>
+                                            <div id="current-rain-modal" style="font-weight:600;">0.5 mm</div>
+                                            <div style="font-size:0.95rem;">Curah Hujan</div>
+                                        </div>
+                                    </div>
+                                    <div style="display:flex;align-items:center;gap:8px;">
+                                        <i class="fas fa-temperature-low" style="font-size:1rem;color:#3498db;"></i>
+                                        <div>
+                                            <div id="current-feels-like-modal" style="font-weight:600;">29°C</div>
+                                            <div style="font-size:0.95rem;">Terasa seperti</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="background:#fff;border-radius:10px;padding:18px;box-shadow:0 4px 6px rgba(0,0,0,0.08);position:relative;">
+                            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid #eee;">
+                                <span style="font-size:1.1rem;color:#2c3e50;font-weight:600;">Peta Kelembapan</span>
+                                <i class="fas fa-map" style="font-size:1.3rem;color:#3498db;"></i>
+                            </div>
+                            <div style="height:220px;background:#eee;border-radius:10px;overflow:hidden;position:relative;">
+                                <iframe
+                                width="100%"
+                                height="220"
+                                src="https://embed.windy.com/embed2.html?lat=-7.04365&lon=113.43384&zoom=8&level=surface&overlay=humidity&menu=&message=&marker=&calendar=&pressure=&type=map&location=coordinates&detailLat=-7.04365&detailLon=113.43384"
+                                frameborder="0">
+                                </iframe>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                    <h2 style="font-size:1.2rem;color:#2c3e50;margin:22px 0 12px;padding-bottom:8px;border-bottom:2px solid #ecf0f1;">Prakiraan Curah Hujan</h2>
+                    <div style="background:#fff;border-radius:10px;padding:12px;box-shadow:0 4px 6px rgba(0,0,0,0.08);margin-bottom:18px;">
+                        <div id="rain-forecast-modal" style="display:grid;grid-template-columns:repeat(5,1fr);gap:10px;">
+                            <div>
+                                <div style="font-weight:600;margin-bottom:6px;">Hari Ini</div>
+                                <i class="fas fa-cloud-rain" style="font-size:1.3rem;color:#f39c12;"></i>
+                                <div id="rain-today-modal" style="font-weight:600;margin:5px 0;">0.5 mm</div>
+                                <div style="font-size:0.95rem;color:#95a5a6;">Rendah</div>
+                            </div>
+                            <div>
+                                <div style="font-weight:600;margin-bottom:6px;">Besok</div>
+                                <i class="fas fa-cloud-rain" style="font-size:1.3rem;color:#f39c12;"></i>
+                                <div id="rain-tomorrow-modal" style="font-weight:600;margin:5px 0;">1.2 mm</div>
+                                <div style="font-size:0.95rem;color:#95a5a6;">Sedang</div>
+                            </div>
+                            <div>
+                                <div style="font-weight:600;margin-bottom:6px;">Lusa</div>
+                                <i class="fas fa-cloud" style="font-size:1.3rem;color:#f39c12;"></i>
+                                <div id="rain-day3-modal" style="font-weight:600;margin:5px 0;">0.1 mm</div>
+                                <div style="font-size:0.95rem;color:#95a5a6;">Sangat Rendah</div>
+                            </div>
+                            <div>
+                                <div style="font-weight:600;margin-bottom:6px;">3 Hari</div>
+                                <i class="fas fa-cloud-sun" style="font-size:1.3rem;color:#f39c12;"></i>
+                                <div id="rain-day4-modal" style="font-weight:600;margin:5px 0;">0 mm</div>
+                                <div style="font-size:0.95rem;color:#95a5a6;">Tidak ada</div>
+                            </div>
+                            <div>
+                                <div style="font-weight:600;margin-bottom:6px;">4 Hari</div>
+                                <i class="fas fa-cloud-rain" style="font-size:1.3rem;color:#f39c12;"></i>
+                                <div id="rain-day5-modal" style="font-weight:600;margin:5px 0;">2.4 mm</div>
+                                <div style="font-size:0.95rem;color:#95a5a6;">Tinggi</div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Anda bisa menambahkan prakiraan temperatur, angin, kelembapan dengan cara serupa -->
+                    <footer style="text-align:center;padding:10px;color:#95a5a6;font-size:0.9rem;">
+                        Data cuaca diperbarui secara real-time dari Zoom Earth<br>
+                        © 2023 Informasi Geografis & Cuaca Madura
+                    </footer>
+                </div>
+            </div>
+        </div>
+        <script>
+        // Fungsi update waktu di modal
+        function updateLastUpdateTimeModal() {
+            const now = new Date();
+            const options = { 
+                weekday: 'long', 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric', 
+                hour: '2-digit', 
+                minute: '2-digit',
+                second: '2-digit'
+            };
+            document.getElementById('update-time-modal').textContent = now.toLocaleDateString('id-ID', options);
+        }
+        function updateRainForecastFromAPI() {
+            const API_KEY = 'GANTI_DENGAN_API_KEY_KAMU';
+            fetch('https://api.openweathermap.org/data/2.5/forecast?lat=-7.04365&lon=113.43384&units=metric&appid=' + API_KEY)
+              .then(response => response.json())
+              .then(data => {
+            let rainValues = [0, 0, 0, 0, 0];
+            let days = [];
+            data.list.forEach(item => {
+                const date = new Date(item.dt * 1000);
+                const day = date.getDate();
+                if (!days.includes(day) && days.length < 5 && date.getHours() === 12) {
+                days.push(day);
+                rainValues[days.length - 1] = item.rain ? item.rain['3h'] || 0 : 0;
+                }
+            });
+            document.getElementById('rain-today-modal').textContent = (rainValues[0] || 0) + ' mm';
+            document.getElementById('rain-tomorrow-modal').textContent = (rainValues[1] || 0) + ' mm';
+            document.getElementById('rain-day3-modal').textContent = (rainValues[2] || 0) + ' mm';
+            document.getElementById('rain-day4-modal').textContent = (rainValues[3] || 0) + ' mm';
+            document.getElementById('rain-day5-modal').textContent = (rainValues[4] || 0) + ' mm';
+              });
+        }
+        function updateWeatherTodayFromAPI() {
+            const API_KEY = 'GANTI_DENGAN_API_KEY_KAMU';
+            fetch('https://api.openweathermap.org/data/2.5/weather?lat=-7.04365&lon=113.43384&units=metric&appid=' + API_KEY)
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('current-temp-modal').textContent = Math.round(data.main.temp) + '°C';
+                document.getElementById('current-humidity-modal').textContent = data.main.humidity + '%';
+                document.getElementById('current-wind-modal').textContent = Math.round(data.wind.speed) + ' km/jam';
+                let rain = 0;
+                if (data.rain && data.rain['1h']) rain = data.rain['1h'];
+                document.getElementById('current-rain-modal').textContent = rain + ' mm';
+                document.getElementById('current-feels-like-modal').textContent = Math.round(data.main.feels_like) + '°C';
+                const weatherDesc = document.getElementById('weather-desc-modal');
+                const icon = document.getElementById('current-weather-icon-modal');
+                const desc = data.weather[0].main.toLowerCase();
+                if (desc.includes('rain')) {
+                    weatherDesc.textContent = 'Hujan';
+                    icon.className = 'fas fa-cloud-rain';
+                } else if (desc.includes('cloud')) {
+                    weatherDesc.textContent = 'Berawan';
+                    icon.className = 'fas fa-cloud';
+                } else if (desc.includes('clear')) {
+                    weatherDesc.textContent = 'Cerah';
+                    icon.className = 'fas fa-sun';
+                } else {
+                    weatherDesc.textContent = data.weather[0].description;
+                    icon.className = 'fas fa-cloud-sun';
+                }
+            });
+        }
+
+        // Panggil di event DOMContentLoaded
+        document.addEventListener('DOMContentLoaded', function() {
+            updateLastUpdateTimeModal();
+            updateWeatherTodayFromAPI();
+            updateRainForecastFromAPI();
+        });
+
+
+        document.addEventListener('DOMContentLoaded', function() {
+            updateLastUpdateTimeModal();
+            updateWeatherDataModal();
+            updateRainForecastFromAPI();
+        });
+        document.getElementById('refresh-btn-modal').addEventListener('click', function() {
+            this.innerHTML = '<div style="display:inline-block;width:18px;height:18px;border:3px solid rgba(255,255,255,.3);border-radius:50%;border-top-color:white;animation:spin 1s linear infinite;"></div> Memuat...';
+            setTimeout(() => {
+                updateWeatherDataModal();
+                updateLastUpdateTimeModal();
+                this.innerHTML = '<i class="fas fa-sync-alt"></i> Segarkan';
+                alert('Data berhasil diperbarui!');
+            }, 1200);
+        });
+        document.addEventListener('DOMContentLoaded', function() {
+            updateLastUpdateTimeModal();
+            updateWeatherDataModal();
+        });
+        </script>
+        </script>
+        <button class="hamburger" onclick="toggleSidebar()">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+        <div class="sky morning">
+            <div class="sun-moon-container">
+                <div class="sun">
+                    <div class="sun-aura"></div>
+                </div>
+                <div class="moon">
+                    <div class="moon-aura"></div>
+                </div>
+            </div>
+            <div class="time-display">Pagi</div>
+        </div>
+        <div class="container"></div>
+        <div class="header-content">
+            <div class="logo">
+                <i class="fas fa-map-marked-alt"></i>
+            </div>
+            <!-- Animasi designer muncul per kalimat -->
+            <div class="designer-animasi" style="width:100%;margin:0 auto;text-align:center;">
+                <div id="designer-title" style="font-size:2rem;color:rgb(3, 245, 3);margin-bottom:0.5rem;font-weight:400;opacity:0;"></div>
+                <div id="designer-names" style="color:#fbc02d;font-size:0.9rem;line-height:1.4;opacity:0;"></div>
+            </div>
+            <h1 style="color:#fff; 
+                text-shadow:
+                    -1px -1px 0 #000,  
+                    1px -1px 0 #000,
+                    -1px 1px 0 #000,
+                    1px 1px 0 #000;
+                font-weight:700;">
+                Selamat Datang di Desa Sana Tengah
+            </h1>
+            <p class="subtitle">Kabupaten Pamekasan, Madura</p>
+        </div>
+    </header>
+    <script>
+    // Multi-select hamburger (garis tiga) toggle, tidak mengganggu layout mobile
+    function toggleSidebar(e) {
+        const sidebar = document.getElementById('sidebar');
+        sidebar.classList.toggle('open');
+        // Jangan gunakan event global pada body, cukup toggle class saja
+        // Agar sidebar bisa dibuka/tutup tanpa mengganggu layout mobile
+        if (e) e.stopPropagation();
+    }
+    // Tutup sidebar jika klik close button
+    // (Sudah ada tombol close di sidebar, tidak perlu klik di luar area)
+    </script>
+    <div class="designer-ticker" style="width:100%;margin:0 auto;text-align:center;overflow:hidden;white-space:nowrap;background:var(--primary);">
+        <span id="ticker-title" class="shine-text" style="font-size:1,3rem;font-weight:400;display:inline-block;">
+            Aditya Tri Prasetyo
+        </span>
+        <span id="ticker-names" style="color:#f6fa03;font-size:0.9rem;line-height:1.4;display:inline-block;margin-left:12px;min-width:180px;"></span>
+    </div>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Sky animation
+        const sky = document.querySelector('.sky');
+        const sun = document.querySelector('.sun');
+        const moon = document.querySelector('.moon');
+        const timeDisplay = document.querySelector('.time-display');
+        // Create clouds
+        function createClouds() {
+            const cloudCount = 8;
+            for (let i = 0; i < cloudCount; i++) {
+                const cloud = document.createElement('div');
+                cloud.className = 'cloud';
+                const size = Math.random() * 60 + 40;
+                const yPos = Math.random() * 40 + 10;
+                const opacity = Math.random() * 0.5 + 0.5;
+                const duration = Math.random() * 60 + 60;
+                const delay = Math.random() * -80;
+                cloud.style.width = `${size}px`;
+                cloud.style.height = `${size * 0.6}px`;
+                cloud.style.top = `${yPos}%`;
+                cloud.style.left = `${Math.random() * 100}%`;
+                cloud.style.opacity = opacity;
+                cloud.style.animationDuration = `${duration}s`;
+                cloud.style.animationDelay = `${delay}s`;
+                sky.appendChild(cloud);
+            }
+        }
+        // Update time and animation
+        function updateTime() {
+            const now = new Date();
+            const hours = now.getHours();
+            const minutes = now.getMinutes();
+            const seconds = now.getSeconds();
+            const timeString = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            let timeOfDay, timeText;
+            let sunX, sunY, moonX, moonY;
+            if (hours >= 5 && hours < 11) {
+                timeOfDay = 'morning';
+                timeText = `Pagi ${timeString}`;
+            } else if (hours >= 11 && hours < 14) {
+                timeOfDay = 'noon';
+                timeText = `Siang ${timeString}`;
+            } else if (hours >= 14 && hours < 17) {
+                timeOfDay = 'afternoon';
+                timeText = `Sore ${timeString}`;
+            } else if (hours >= 17 && hours < 19) {
+                timeOfDay = 'evening';
+                timeText = `Petang ${timeString}`;
+            } else {
+                timeOfDay = 'night';
+                timeText = `Malam ${timeString}`;
+            }
+            sky.className = `sky ${timeOfDay}`;
+            if (hours >= 5 && hours < 19) {
+                const sunProgress = (hours - 5 + minutes/60) / 14;
+                sunX = sunProgress * 100;
+                sunY = Math.sin(sunProgress * Math.PI) * 50 + 20;
+                sun.style.left = `${sunX}%`;
+                sun.style.top = `${sunY}%`;
+                sun.style.opacity = '1';
+                moon.style.opacity = '0';
+            } else {
+                sun.style.opacity = '0';
+                let moonProgress;
+                if (hours >= 19) {
+                    moonProgress = (hours - 19 + minutes/60) / 10;
+                } else {
+                    moonProgress = (hours + 5 + minutes/60) / 10;
+                }
+                moonX = moonProgress * 100;
+                moonY = Math.sin(moonProgress * Math.PI) * 50 + 20;
+                moon.style.left = `${moonX}%`;
+                moon.style.top = `${moonY}%`;
+                moon.style.opacity = '1';
+            }
+            timeDisplay.textContent = timeText;
+        }
+        createClouds();
+        updateTime();
+        setInterval(updateTime, 1000);
+        // Ticker
+        const names = [
+            "Suhartono",
+            "Muh. Fajri Fadhil Amin",
+            "Aldy Prayoga Pangestu",
+            "Uswatun Nisak",
+            "Eisya Nur Faj'ria",
+            "Adelia Azhari Putri",
+            "Imellya Natasya",
+            "Qorinatun Nabila",
+            "Revina Trias Pratiwi",
+            "Tarwiyatu Rossaeida",
+            "Zahra Najma Atika",
+            "Handa Siska",
+            "Risma Indah Sari"
+        ];
+        const ticker = document.getElementById("ticker-names");
+        let i = 0;
+        function showTicker() {
+            ticker.innerHTML = `<span class="ticker-animate">${names[i]}</span>`;
+            i = (i + 1) % names.length;
+        }
+        showTicker();
+        setInterval(showTicker, 2500);
+    });
+    </script>
+</script>
+        <div class="search-container">
+            <input type="text" class="search-box" id="dusun-search" placeholder="Cari dusun di Desa Sana Tengah..." autocomplete="off">
+            <button class="search-btn"><i class="fas fa-search"></i></button>
+            <ul id="dusun-suggestions" style="position:absolute;left:0;right:0;top:100%;background:#fff;z-index:10;list-style:none;margin:4px 0 0 0;padding:0;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.08);display:none;max-height:220px;overflow-y:auto;"></ul>
+        </div>
+
+        <div class="map-container">
+            <iframe src="https://www.google.com/maps/d/embed?mid=1Z63ZjCWZ14S3M-ymspcELcyjUchEyOc&ehbc=2E312F" width="100%" height="100%" frameborder="0" style="border:0" allowfullscreen></iframe>
+            <div class="map-overlay">
+                <div class="map-controls">
+                    <button class="map-btn" onclick="zoomIn()">
+                        <i class="fas fa-plus"></i>
+                    </button>
+                    <button class="map-btn" onclick="zoomOut()">
+                        <i class="fas fa-minus"></i>
+                    </button>
+                    <button class="map-btn" onclick="locateMe()">
+                        <i class="fas fa-location-arrow"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <script>
+        const dusunNames = [
+            "Dusun Korong Dajah",
+            "Dusun Sumber Penang",
+            "Dusun Bungguplong",
+            "Dusun Taretah",
+            "Dusun Ibaih",
+            "Dusun Jungjang",
+            "Dusun Cekonce Timur",
+            "Dusun Langdulang",
+            "Dusun Korong Laok",
+            "Balai Desa Sana Tengah",
+            "Koperasi Desa Sana Tengah"
+        ];
+        const dusunSearch = document.getElementById('dusun-search');
+        const dusunSuggestions = document.getElementById('dusun-suggestions');
+
+        dusunSearch.addEventListener('input', function() {
+            const val = this.value.trim().toLowerCase();
+            dusunSuggestions.innerHTML = '';
+            if (!val) {
+                dusunSuggestions.style.display = 'none';
+                return;
+            }
+            const filtered = dusunNames.filter(name => name.toLowerCase().includes(val));
+            if (filtered.length === 0) {
+                dusunSuggestions.style.display = 'none';
+                return;
+            }
+            filtered.forEach(name => {
+                const li = document.createElement('li');
+                li.textContent = name;
+                li.style.padding = '10px 18px';
+                li.style.cursor = 'pointer';
+                li.addEventListener('mousedown', function(e) {
+                    e.preventDefault();
+                    dusunSearch.value = name;
+                    dusunSuggestions.style.display = 'none';
+                    highlightCard(name);
+                });
+                dusunSuggestions.appendChild(li);
+            });
+            dusunSuggestions.style.display = 'block';
+        });
+
+        dusunSearch.addEventListener('blur', function() {
+            setTimeout(() => dusunSuggestions.style.display = 'none', 120);
+        });
+
+        dusunSearch.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                const val = this.value.trim().toLowerCase();
+                const match = dusunNames.find(name => name.toLowerCase() === val);
+                if (match) {
+                    highlightCard(match);
+                    dusunSuggestions.style.display = 'none';
+                }
+            }
+        });
+
+        function highlightCard(name) {
+            // Remove highlight from all cards
+            document.querySelectorAll('.destination-card').forEach(card => {
+                card.style.boxShadow = '';
+                card.style.borderColor = '';
+            });
+            // Find card by title
+            const cards = document.querySelectorAll('.destination-card');
+            for (const card of cards) {
+                const title = card.querySelector('.card-title, .visitor-title');
+                if (title && title.textContent.trim().toLowerCase() === name.toLowerCase()) {
+                    card.scrollIntoView({behavior: 'smooth', block: 'center'});
+                    card.style.boxShadow = '0 0 0 4px #fbc02d, 0 5px 15px rgba(0,0,0,0.08)';
+                    card.style.borderColor = '#fbc02d';
+                    setTimeout(() => {
+                        card.style.boxShadow = '';
+                        card.style.borderColor = '';
+                    }, 1800);
+                    break;
+                }
+            }
+        }
+        </script>
+        
+        <div class="dusun-section">
+            <h2 class="section-title">Daftar Dusun</h2>
+            <p style="text-align: left; max-width: 1200px; margin: 0 auto 2rem; color: var(--text-light); font-size: 1.15rem;">
+                Desa Sana Tengah merupakan satu dari 9 Desa yang ada di Kecamatan Pasean Kabupaten Pamekasan Propinsi Jawa Timur. Kode Pos Desa Sana Tengah adalah 69356. Kabupaten Pamekasan memiliki 185 Desa/ Kelurahan yang tersebar di 12 Kecamatan terdiri dari 174 Desa dan 11 Kelurahan. Dalam Pelaksanaan Tata Kelola Keuangan, Pengelolaan Aset, Profile Desa dan Sistem Administrasi Desa Sana Tengah telah didukung oleh Aplikasi Siskeudes, Sipades dan Smart Village (Desa Cerdas) berupa Sistem Informasi Desa Digital berbasis website yang mendukung Program Pemerintah Satu Data Indonesia dalam jaringan terintegrasi sehingga memudahkan tata kelola administrasi yang terakuntabilitas serta Sistem Informasi Publik yang transparan.
+            </p>
+            
+            <div class="destinations">
+                <div class="destination-card">
+                    <img src="https://github.com/hjda-fa/dusun-sana-tengah/blob/main/korong%20sajah.jpeg?raw=true" alt="Dusun Korong Dajah" class="card-image">
+                    <div class="card-content">
+                        <h3 class="card-title">Dusun Korong Dajah</h3>
+                        <div class="card-location">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>Pusat kegiatan ekonomi desa</span>
+                        </div>
+                        <p class="card-description">
+                            Dusun ini merupakan pusat perekonomian Desa Sana Tengah dengan berbagai usaha dan perdagangan yang berkembang pesat.
+                        </p>
+                        <div class="card-footer">
+                            <button class="map-btn" onclick="window.open('https://www.google.com/maps?q=-6.941056,113.608056','_blank')">
+                                <i class="fas fa-map-marker-alt"></i> Lihat Lokasi
+                            </button>
+                            <button class="map-btn" style="background: var(--secondary); color: var(--dark);" onclick="window.open('https://www.google.com/maps/dir/?api=1&destination=-6.941056,113.608056','_blank')">
+                                <i class="fas fa-play"></i> Mulai
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="destination-card">
+                    <img src="https://github.com/daa-da/Desa-Sana-Tengah/blob/main/sumber%20penang.jpeg?raw=true" class="card-image">
+                    <div class="card-content">
+                        <h3 class="card-title">Dusun Sumber Penang</h3>
+                        <div class="card-location">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>Kawasan penghasil buah-buahan</span>
+                        </div>
+                        <p class="card-description">
+                            Dusun dengan perkebunan buah yang subur, menghasilkan berbagai jenis buah tropis khas Madura dengan kualitas terbaik.
+                        </p>
+                        <div class="card-footer">
+                            <button class="map-btn" onclick="window.open('https://maps.app.goo.gl/Hp9SGg1gbwqkZ8WT8?g_st=aw','_blank')">
+                                <i class="fas fa-map-marker-alt"></i> Lihat Lokasi
+                            </button>
+                            <button class="map-btn" style="background: var(--secondary); color: var(--dark);" onclick="window.open('https://www.google.com/maps/dir/?api=1&destination=-6.942278,113.618611','_blank')">
+                                <i class="fas fa-play"></i> Mulai
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="destination-card">
+                    <img src="https://github.com/daa-da/Desa-Sana-Tengah/blob/main/Bungguplong.jpeg?raw=true" alt="Dusun Bungguplong" class="card-image">
+                    <div class="card-content">
+                        <h3 class="card-title">Dusun Bungguplong</h3>
+                        <div class="card-location">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>Sentra pertanian padi</span>
+                        </div>
+                        <p class="card-description">
+                            Lumbung padi desa dengan sawah yang menghampar luas dan sistem irigasi tradisional yang terjaga dengan baik.
+                        </p>
+                        <div class="card-footer">
+                            <button class="map-btn" onclick="window.open('https://maps.app.goo.gl/oKbrrJWmeZJ97Yxz5?g_st=aw','_blank')">
+                                <i class="fas fa-map-marker-alt"></i> Lihat Lokasi
+                            </button>
+                            <button class="map-btn" style="background: var(--secondary); color: var(--dark);" onclick="window.open('https://www.google.com/maps/dir/?api=1&destination=-6.952944,113.620444','_blank')">
+                                <i class="fas fa-play"></i> Mulai
+                            </button>
+                        </div>
+                    </div>
+                </div>    
+                
+                <div class="destination-card">
+                    <img src="https://github.com/daa-da/Desa-Sana-Tengah/blob/main/Taretah.jpeg?raw=true" alt="Dusun Taretah" class="card-image">
+                    <div class="card-content">
+                        <h3 class="card-title">Dusun Taretah</h3>
+                        <div class="card-location">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>Pusat industri rumah tangga</span>
+                        </div>
+                        <p class="card-description">
+                            Sentra kerajinan dan industri kecil dengan berbagai produk unggulan seperti anyaman, batik, dan makanan tradisional.
+                        </p>
+                        <div class="card-footer">
+                            <button class="map-btn" onclick="window.open('https://maps.app.goo.gl/NuDYttdrRGZH6cdU6?g_st=aw','_blank')">
+                                <i class="fas fa-map-marker-alt"></i> Lihat Lokasi
+                            </button>
+                            <button class="map-btn" style="background: var(--secondary); color: var(--dark);" onclick="window.open('https://www.google.com/maps/dir/?api=1&destination=-6.958472,113.616444','_blank')">
+                                <i class="fas fa-play"></i> Mulai
+                            </button>
+                        </div>
+                    </div>
+                </div>
+    
+                <div class="destination-card">
+                    <img src="https://github.com/daa-da/Desa-Sana-Tengah/blob/main/ibaih.jpeg?raw=true" alt="Dusun Ibaih" class="card-image">
+                    <div class="card-content">
+                        <h3 class="card-title">Dusun Ibaih</h3>
+                        <div class="card-location">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>Dekat dengan sumber mata air</span>
+                        </div>
+                        <p class="card-description">
+                            Dusun dengan sumber mata air alami yang jernih, menjadi penyuplai utama kebutuhan air bersih bagi warga desa.
+                        </p>
+                        <div class="card-footer">
+                            <button class="map-btn" onclick="window.open('https://maps.app.goo.gl/2XPXqLzqpHFXcBcF7?g_st=aw','_blank')">
+                                <i class="fas fa-map-marker-alt"></i> Lihat Lokasi
+                            </button>
+                            <button class="map-btn" style="background: var(--secondary); color: var(--dark);" onclick="window.open('https://www.google.com/maps/dir/?api=1&destination=-6.966167,113.608389','_blank')">
+                                <i class="fas fa-play"></i> Mulai
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="destination-card">
+                    <img src="https://github.com/daa-da/Desa-Sana-Tengah/blob/main/junjang.jpeg?raw=true" alt="Dusun Jungjang" class="card-image">
+                    <div class="card-content">
+                        <h3 class="card-title">Dusun Jungjang</h3>
+                        <div class="card-location">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>Pusat kegiatan keagamaan</span>
+                        </div>
+                        <p class="card-description">
+                            Pusat spiritual desa dengan masjid besar dan berbagai kegiatan keagamaan yang menjadi pengikat sosial warga.
+                        </p>
+                        <div class="card-footer">
+                            <button class="map-btn" onclick="window.open('https://maps.app.goo.gl/ZaqvRXTK5BJtsG967?g_st=aw','_blank')">
+                                <i class="fas fa-map-marker-alt"></i> Lihat Lokasi
+                            </button>
+                            <button class="map-btn" style="background: var(--secondary); color: var(--dark);" onclick="window.open('https://www.google.com/maps/dir/?api=1&destination=-6.965194,113.602639','_blank')">
+                                <i class="fas fa-play"></i> Mulai
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="destination-card">
+                    <img src="https://github.com/daa-da/Desa-Sana-Tengah/blob/main/cekonce%20timur.jpeg?raw=true" alt="Dusun Cekonce Timur" class="card-image">
+                    <div class="card-content">
+                        <h3 class="card-title">Dusun Cekonce Timur</h3>
+                        <div class="card-location">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>Kawasan permukiman dan pertanian</span>
+                        </div>
+                        <p class="card-description">
+                            Dusun dengan lingkungan asri, didominasi area pertanian dan pemukiman warga yang rukun serta gotong royong.
+                        </p>
+                        <div class="card-footer">
+                            <button class="map-btn" onclick="window.open('https://maps.app.goo.gl/wRfvNYCzvffiVexr7?g_st=aw','_blank')">
+                                <i class="fas fa-map-marker-alt"></i> Lihat Lokasi
+                            </button>
+                            <button class="map-btn" style="background: var(--secondary); color: var(--dark);" onclick="window.open('https://www.google.com/maps/dir/?api=1&destination=-6.965194,113.602639','_blank')">
+                                <i class="fas fa-play"></i> Mulai
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="destination-card">
+                    <img src="https://github.com/daa-da/Desa-Sana-Tengah/blob/main/Langdulang.jpeg?raw=true" alt="Dusun Langdulang" class="card-image">
+                    <div class="card-content">
+                        <h3 class="card-title">Dusun Langdulang</h3>
+                        <div class="card-location">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>Sentra kerajinan lokal</span>
+                        </div>
+                        <p class="card-description">
+                            Dusun yang dikenal dengan kerajinan tangan dan produk lokal, menjadi pusat kreativitas warga desa.
+                        </p>
+                        <div class="card-footer">
+                            <button class="map-btn" onclick="window.open('https://maps.app.goo.gl/9RM9BHcWy86i5BfU6?g_st=aw','_blank')">
+                                <i class="fas fa-map-marker-alt"></i> Lihat Lokasi
+                            </button>
+                            <button class="map-btn" style="background: var(--secondary); color: var(--dark);" onclick="window.open('https://www.google.com/maps/dir/?api=1&destination=-6.950444,113.605944','_blank')">
+                                <i class="fas fa-play"></i> Mulai
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="destination-card">
+                    <img src="https://github.com/daa-da/Desa-Sana-Tengah/blob/main/korong%20laok.jpeg?raw=true" alt="Dusun Korong Laok" class="card-image">
+                    <div class="card-content">
+                        <h3 class="card-title">Dusun Korong Laok</h3>
+                        <div class="card-location">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>Wilayah pesisir dan nelayan</span>
+                        </div>
+                        <p class="card-description">
+                            Dusun yang berada di area pesisir, mayoritas penduduknya bermata pencaharian sebagai nelayan tradisional.
+                        </p>
+                        <div style="height: 32px;"></div>
+                        <div class="card-footer">
+                            <button class="map-btn" onclick="window.open('https://maps.app.goo.gl/oAkNN8D2Jw1MUehw8?g_st=aw','_blank')">
+                                <i class="fas fa-map-marker-alt"></i> Lihat Lokasi
+                            </button>
+                            <button class="map-btn" style="background: var(--secondary); color: var(--dark);" onclick="window.open('https://www.google.com/maps/dir/?api=1&destination=-6.947472,113.606889','_blank')">
+                                <i class="fas fa-play"></i> Mulai
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="destination-card">
+                    <img src="https://github.com/hjda-fa/dusun-sana-tengah/blob/main/balai%20desa.jpeg?raw=true" alt="Balai Desa Sana Tengah" class="card-image">
+                    <div class="card-content">
+                        <h3 class="card-title">Balai Desa Sana Tengah</h3>
+                        <div class="card-location">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>Wilayah pertanian dan peternakan</span>
+                        </div>
+                        <p class="card-description">
+                            Dusun dengan potensi pertanian dan peternakan, terkenal dengan hasil ternak dan kebun yang produktif.
+                        </p>
+                        <div class="card-footer">
+                            <button class="map-btn" onclick="window.open('https://maps.app.goo.gl/7wQw2kQ8Qw2p3k8n8?g_st=aw','_blank')">
+                                <i class="fas fa-map-marker-alt"></i> Lihat Lokasi
+                            </button>
+                            <button class="map-btn" style="background: var(--secondary); color: var(--dark);" onclick="window.open('https://www.google.com/maps/dir/?api=1&destination=-6.944902613445662,113.6083450151533','_blank')">
+                                <i class="fas fa-play"></i> Mulai
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="destination-card">
+                    <img src="https://github.com/hjda-fa/dusun-sana-tengah/blob/main/koperasi.jpeg?raw=true" alt="Koperasi Desa Sana Tengah" class="card-image">
+                    <div class="card-content">
+                        <h3 class="card-title">Koperasi Desa Sana Tengah</h3>
+                        <div class="card-location">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>Dusun terbaru di Desa Sana Tengah</span>
+                        </div>
+                        <p class="card-description">
+                            Koperasi desa Sana Tengah merupakan pengembangan wilayah dengan potensi pertanian dan pemukiman yang terus berkembang.
+                        </p>
+                        <div class="card-footer">
+                            <button class="map-btn" onclick="window.open('https://maps.app.goo.gl/N64b6cg3SbNHJyWM8?g_st=aw','_blank')">
+                                <i class="fas fa-map-marker-alt"></i> Lihat Lokasi
+                            </button>
+                            <button class="map-btn" style="background: var(--secondary); color: var(--dark);" onclick="window.open('https://www.google.com/maps/dir/?api=1&destination=-6.937472,113.605389','_blank')">
+                                <i class="fas fa-play"></i> Mulai
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="destination-card">
+                    <img src="https://github.com/ada-jq/Sana-Tengah/blob/main/WhatsApp%20Image%202025-07-12%20at%2023.29.19.jpeg?raw=true" alt="Rumah Sektretaris Desa" class="card-image">
+                    <div class="card-content">
+                        <h3 class="card-title">Rumah Sektretaris Desa</h3>
+                        <div class="card-location">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>Rumah Dinas Sektretaris Desa Sana Tengah</span>
+                        </div>
+                        <p class="card-description">
+                            Rumah Sektretaris Desa Sana Tengah menjadi pusat koordinasi administrasi dan pelayanan masyarakat di lingkungan desa.
+                        </p>
+                        <div class="card-footer">
+                            <button class="map-btn" onclick="window.open('https://www.google.com/maps/place/6%C2%B057\'32.5%22S+113%C2%B035\'09.0%22E/@-6.959033,113.585844,17z/data=!3m1!4b1!4m4!3m3!8m2!3d-6.959033!4d113.585844?entry=ttu','_blank')">
+                                <i class="fas fa-map-marker-alt"></i> Lihat Lokasi
+                            </button>
+                            <button class="map-btn" style="background: var(--secondary); color: var(--dark);" onclick="window.open('https://www.google.com/maps/dir/?api=1&destination=-6.959033,113.585844','_blank')">
+                                <i class="fas fa-play"></i> Mulai
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="destination-card">
+                    <div class="card-content">
+                        <h3 class="visitor-title" style="margin-bottom:1rem;">Data Pengunjung</h3>
+                        <form id="visitor-form" class="visitor-form" style="display:block;">
+                            <div class="form-group">
+                                <label for="country">Negara Asal</label>
+                                <input type="text" id="country" name="country" readonly>
+                            </div>
+                            <div class="form-group">
+                                <label for="region">Wilayah</label>
+                                <input type="text" id="region" name="region" readonly>
+                            </div>
+                            <div class="form-group">
+                                <label for="device">Perangkat</label>
+                                <input type="text" id="device" name="device" readonly>
+                            </div>
+                            <div class="form-group">
+                                <label for="browser">Browser</label>
+                                <input type="text" id="browser" name="browser" readonly>
+                            </div>
+                            <div class="form-group">
+                                <label for="date">Tanggal Kunjungan</label>
+                                <input type="text" id="date" name="date" readonly>
+                            </div>
+                            <div class="form-group">
+                                <label for="time">Waktu Kunjungan</label>
+                                <input type="text" id="time" name="time" readonly>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <h3>Desa Sana Tengah</h3>
+                <p>Kabupaten Pamekasan, Madura, Jawa Timur</p>
+                
+                <div class="social-links">
+                    <a href="https://www.facebook.com/profile.php?id=100092633238005" class="social-link" target="_blank" rel="noopener"><i class="fab fa-facebook-f"></i></a>
+                    <a href="https://www.instagram.com/pemerintahdesasanatengah/" class="social-link" target="_blank" rel="noopener"><i class="fab fa-instagram"></i></a>
+                    <a href="https://www.youtube.com/@PEMERINTAHDESASANATENGAH" class="social-link" target="_blank" rel="noopener"><i class="fab fa-youtube"></i></a>
+                    <a href="https://wa.me/6285235885335" class="social-link" target="_blank" rel="noopener"><i class="fab fa-whatsapp"></i></a>
+                    <a href="https://x.com/DESASANATENGAH" class="social-link" target="_blank" rel="noopener"><i class="fab fa-twitter"></i></a>
+                    <a href="https://www.tiktok.com/@pemerintahdesasanatengah" class="social-link" target="_blank" rel="noopener"><i class="fab fa-tiktok"></i></a>
+                </div>
+                <p class="copyright">&copy; 2025 Desa Sana Tengah, Kecamatan Pasean, Kabupaten Pamekasan 69356.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Function to get visitor data
+        function getVisitorData() {
+            // Get country and region
+            fetch('https://ipapi.co/json/')
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('country').value = data.country_name || 'Tidak Diketahui';
+                    document.getElementById('region').value = data.region || 'Tidak Diketahui';
+                })
+                .catch(() => {
+                    document.getElementById('country').value = 'Tidak Diketahui';
+                    document.getElementById('region').value = 'Tidak Diketahui';
+                });
+            
+            // Get device info
+            const userAgent = navigator.userAgent;
+            let device = 'Desktop';
+            if (/Mobi|Android/i.test(userAgent)) {
+                device = 'Mobile';
+            } else if (/Tablet|iPad/i.test(userAgent)) {
+                device = 'Tablet';
+            }
+            document.getElementById('device').value = device;
+            
+            // Get browser info
+            let browser = 'Browser Lain';
+            if (userAgent.includes('Chrome')) browser = 'Chrome';
+            else if (userAgent.includes('Firefox')) browser = 'Firefox';
+            else if (userAgent.includes('Safari')) browser = 'Safari';
+            else if (userAgent.includes('Edge')) browser = 'Edge';
+            document.getElementById('browser').value = browser;
+            
+            // Get current date and time
+            const now = new Date();
+            const options = { year: 'numeric', month: 'long', day: 'numeric' };
+            document.getElementById('date').value = now.toLocaleDateString('id-ID', options);
+            document.getElementById('time').value = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true });
+        }
+        
+        // Simple functions to handle map interactions
+        function zoomIn() {
+            alert("Fitur zoom in tidak tersedia untuk peta embed. Gunakan kontrol zoom di peta langsung.");
+        }
+        
+        function zoomOut() {
+            alert("Fitur zoom out tidak tersedia untuk peta embed. Gunakan kontrol zoom di peta langsung.");
+        }
+        
+        function locateMe() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(position => {
+                    alert(`Lokasi Anda: ${position.coords.latitude}, ${position.coords.longitude}\n\nSilakan cari lokasi ini di peta.`);
+                }, error => {
+                    alert('Tidak dapat mendapatkan lokasi Anda: ' + error.message);
+                });
+            } else {
+                alert('Geolocation tidak didukung oleh browser Anda');
+            }
+        }
+        
+        // Function to focus on location from cards
+        function focusOnLocation(lat, lng) {
+            alert(`Peta akan menampilkan lokasi: ${lat}, ${lng}\n\nUntuk peta embed, silakan cari lokasi ini secara manual.`);
+        }
+        
+        // Run when page loads
+        window.onload = getVisitorData;
+    </script>
+    <!-- Tambahkan ini di bagian head -->
+    <style>
+        /* Style untuk modal login admin */
+        #login-admin-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 100000;
+            background: rgba(0,0,0,0.45);
+            align-items: center;
+            justify-content: center;
+        }
+        
+        #login-admin-modal > div {
+            background: #fff;
+            border-radius: 12px;
+            max-width: 350px;
+            width: 92vw;
+            padding: 32px 24px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+            position: relative;
+        }
+        
+        #login-admin-modal h2 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 18px;
+        }
+        
+        #login-admin-modal label {
+            display: block;
+            margin-bottom: 6px;
+        }
+        
+        #login-admin-modal input {
+            width: 100%;
+            padding: 10px;
+            border-radius: 6px;
+            border: 1px solid #ddd;
+            margin-bottom: 16px;
+        }
+        
+        #login-admin-modal button[type="submit"] {
+            width: 100%;
+            padding: 10px 0;
+            border: none;
+            border-radius: 6px;
+            background: #4a6fa5;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        
+        #login-admin-error {
+            color: #e74c3c;
+            text-align: center;
+            margin-top: 10px;
+            display: none;
+        }
+        
+        .login-info {
+            margin-top: 18px;
+            font-size: 0.95rem;
+            color: #888;
+            text-align: center;
+        }
+    </style>
+
+    <!-- Tambahkan modal login admin sebelum penutup body -->
+    <div id="login-admin-modal">
+        <div>
+            <button onclick="closeLoginAdminModal()" style="position:absolute;top:12px;right:18px;font-size:2rem;background:none;border:none;color:#e74c3c;cursor:pointer;z-index:10;">&times;</button>
+            <h2>Login Admin</h2>
+            <form id="login-admin-form" autocomplete="off">
+                <div>
+                    <label for="admin-username">Username (Email)</label>
+                    <input type="email" id="admin-username" required>
+                </div>
+                <div>
+                    <label for="admin-password">Password</label>
+                    <input type="password" id="admin-password" required>
+                </div>
+                <button type="submit">Login</button>
+            </form>
+            <div id="login-admin-error"></div>
+            <div class="login-info">
+            </div>
+        </div>
+    </div>
+
+    <script>
+    // Fungsi untuk modal login admin
+    function showLoginAdminModal() {
+        document.getElementById('login-admin-modal').style.display = 'flex';
+        document.getElementById('admin-username').value = '';
+        document.getElementById('admin-password').value = '';
+        document.getElementById('login-admin-error').style.display = 'none';
+    }
+
+    function closeLoginAdminModal() {
+        document.getElementById('login-admin-modal').style.display = 'none';
+    }
+
+    // Status login admin (disimpan di localStorage)
+    function isAdminLoggedIn() {
+        return localStorage.getItem('isAdmin') === 'true';
+    }
+
+    function setAdminLogin(status) {
+        localStorage.setItem('isAdmin', status ? 'true' : 'false');
+    }
+
+    // Handle form login
+    document.addEventListener('DOMContentLoaded', function() {
+        // Update link Login Admin di sidebar
+        document.querySelector('a[href="#login-admin"]').onclick = function(e) {
+            e.preventDefault();
+            showLoginAdminModal();
+        };
+        
+        // Handle submit form login
+        document.getElementById('login-admin-form').onsubmit = function(e) {
+            e.preventDefault();
+            const username = document.getElementById('admin-username').value.trim();
+            const password = document.getElementById('admin-password').value;
+            
+            // Validasi login
+            if (username === 'risalaja38@gmail.com' && password === 'SANATENGAH123') {
+                setAdminLogin(true);
+                closeLoginAdminModal();
+                alert('Login admin berhasil!');
+                // Refresh tampilan arsip untuk menyesuaikan hak akses
+                if (document.getElementById('arsip-modal').style.display === 'flex') {
+                    renderArsip();
+                }
+            } else {
+                setAdminLogin(false);
+                document.getElementById('login-admin-error').textContent = 'Username atau password salah!';
+                document.getElementById('login-admin-error').style.display = 'block';
+            }
+        };
+        
+        // Cek status login saat pertama kali load
+        if (isAdminLoggedIn()) {
+            console.log('Admin sudah login');
+        }
+    });
+
+    // Modifikasi fungsi renderArsip untuk menyesuaikan hak akses
+    function renderArsip(filter = "semua arsip", search = "") {
+        const grid = document.getElementById('arsip-list');
+        grid.innerHTML = "";
+        let filtered = arsipData.filter(item => {
+            let cocokTab = filter === "semua arsip" || item.type.toLowerCase() === filter;
+            let cocokCari = item.title.toLowerCase().includes(search);
+            return cocokTab && cocokCari;
+        });
+        
+        if (filtered.length === 0) {
+            grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;color:#aaa;padding:40px 0;">Tidak ada arsip ditemukan.</div>`;
+            return;
+        }
+
+        // Sembunyikan tombol upload jika bukan admin
+        document.getElementById('arsip-upload-btn').style.display = isAdminLoggedIn() ? 'inline-flex' : 'none';
+
+        filtered.forEach(item => {
+            let card = document.createElement('div');
+            card.className = "archive-card";
+            card.style = "background-color:white;border-radius:10px;overflow:hidden;box-shadow:0 4px 6px rgba(0,0,0,0.05);transition:all 0.3s ease;position:relative;";
+            
+            let header = "";
+            if (item.type === "Foto") {
+                header = `<div class="card-header" style="height:160px;overflow:hidden;position:relative;">
+                    <img src="${item.src}" alt="${item.title}" style="width:100%;height:100%;object-fit:cover;transition:transform 0.5s;">
+                    <div class="file-type" style="position:absolute;top:10px;right:10px;background-color:rgba(0,0,0,0.7);color:white;padding:5px 10px;border-radius:20px;font-size:12px;">${item.type}</div>
+                </div>`;
+            } else if (item.type === "Video") {
+                header = `<div class="card-header" style="height:160px;overflow:hidden;position:relative;">
+                    <video poster="${item.poster || ''}" controls style="width:100%;height:100%;object-fit:cover;transition:transform 0.5s;">
+                        <source src="${item.src}" type="video/mp4">
+                    </video>
+                    <div class="file-type" style="position:absolute;top:10px;right:10px;background-color:rgba(0,0,0,0.7);color:white;padding:5px 10px;border-radius:20px;font-size:12px;">${item.type}</div>
+                </div>`;
+            } else {
+                header = `<div class="card-header" style="height:160px;overflow:hidden;position:relative;">
+                    <div class="file-icon" style="display:flex;align-items:center;justify-content:center;height:100%;background-color:#f0f4f8;">
+                        <i class="fas ${item.icon || 'fa-file'}" style="font-size:60px;color:#4a6fa5;"></i>
+                    </div>
+                    <div class="file-type" style="position:absolute;top:10px;right:10px;background-color:rgba(0,0,0,0.7);color:white;padding:5px 10px;border-radius:20px;font-size:12px;">${item.type}</div>
+                </div>`;
+            }
+            
+            // Tombol edit/hapus hanya muncul jika admin login
+            card.innerHTML = `
+                ${header}
+                <div class="card-body" style="padding:15px;">
+                    <h3 class="card-title" style="font-weight:600;margin-bottom:8px;color:#343a40;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${item.title}</h3>
+                    <div class="card-meta" style="display:flex;justify-content:space-between;font-size:12px;color:#6c757d;margin-bottom:15px;">
+                        <span><i class="far fa-calendar-alt"></i> ${new Date(item.date).toLocaleDateString('id-ID')}</span>
+                        <span><i class="far fa-file"></i> ${item.size}</span>
+                    </div>
+                    <div class="card-actions" style="display:flex;justify-content:space-between;border-top:1px solid #eee;padding-top:15px;">
+                        <button class="btn-action btn-download" data-id="${item.id}" style="padding:6px 12px;border-radius:5px;font-size:13px;display:inline-flex;align-items:center;background-color:rgba(40,167,69,0.1);color:#28a745;">
+                            <i class="fas fa-download" style="margin-right:5px;"></i> Unduh
+                        </button>
+                        ${isAdminLoggedIn() ? `
+                        <button class="btn-action btn-edit" data-id="${item.id}" style="padding:6px 12px;border-radius:5px;font-size:13px;display:inline-flex;align-items:center;background-color:rgba(255,193,7,0.1);color:#ffc107;">
+                            <i class="fas fa-edit" style="margin-right:5px;"></i> Edit
+                        </button>
+                        <button class="btn-action btn-delete" data-id="${item.id}" style="padding:6px 12px;border-radius:5px;font-size:13px;display:inline-flex;align-items:center;background-color:rgba(220,53,69,0.1);color:#dc3545;">
+                            <i class="fas fa-trash" style="margin-right:5px;"></i> Hapus
+                        </button>
+                        ` : ''}
+                    </div>
+                </div>
+            `;
+            grid.appendChild(card);
+        });
+
+        // Event tombol
+        grid.querySelectorAll('.btn-download').forEach(btn => {
+            btn.onclick = function() {
+                const id = +btn.getAttribute('data-id');
+                const arsip = arsipData.find(a => a.id === id);
+                if (arsip && arsip.src) {
+                    window.open(arsip.src, '_blank');
+                } else {
+                    alert('File tidak tersedia untuk diunduh.');
+                }
+            };
+        });
+        
+        if (isAdminLoggedIn()) {
+            grid.querySelectorAll('.btn-edit').forEach(btn => {
+                btn.onclick = function() {
+                    const id = +btn.getAttribute('data-id');
+                    const arsip = arsipData.find(a => a.id === id);
+                    if (!arsip) return;
+                    const newTitle = prompt('Edit judul arsip:', arsip.title);
+                    if (!newTitle) return;
+                    arsip.title = newTitle;
+                    const newSize = prompt('Edit ukuran file:', arsip.size);
+                    if (newSize) arsip.size = newSize;
+                    saveArsipData(arsipData);
+                    renderArsip(currentTab, currentSearch);
+                };
+            });
+            
+            grid.querySelectorAll('.btn-delete').forEach(btn => {
+                btn.onclick = function() {
+                    const id = +btn.getAttribute('data-id');
+                    if (confirm('Yakin ingin menghapus arsip ini?')) {
+                        arsipData = arsipData.filter(a => a.id !== id);
+                        saveArsipData(arsipData);
+                        renderArsip(currentTab, currentSearch);
+                    }
+                };
+            });
+        }
+    }
+
+    // Tambah Arsip: buka file lokal (hanya admin)
+    document.getElementById('arsip-upload-btn').onclick = function() {
+        if (!isAdminLoggedIn()) {
+            alert('Hanya admin yang dapat menambah arsip!');
+            return;
+        }
+        document.getElementById('arsip-file-input').value = '';
+        document.getElementById('arsip-file-input').click();
+    };
+    </script>
+    </script>
+    <!-- Modal Login Admin -->
+    <div id="login-admin-modal" style="display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:100000;background:rgba(0,0,0,0.45);align-items:center;justify-content:center;">
+        <div style="background:#fff;border-radius:12px;max-width:350px;width:92vw;padding:32px 24px;box-shadow:0 8px 32px rgba(0,0,0,0.18);position:relative;">
+            <button onclick="closeLoginAdminModal()" style="position:absolute;top:12px;right:18px;font-size:2rem;background:none;border:none;color:#e74c3c;cursor:pointer;z-index:10;">&times;</button>
+            <h2 style="text-align:center;color:#2c3e50;margin-bottom:18px;">Login Admin</h2>
+            <form id="login-admin-form" autocomplete="off">
+                <div style="margin-bottom:16px;">
+                    <label for="admin-username" style="display:block;margin-bottom:6px;">Username (Email)</label>
+                    <input type="email" id="admin-username" style="width:100%;padding:10px;border-radius:6px;border:1px solid #ddd;" required>
+                </div>
+                <div style="margin-bottom:18px;">
+                    <label for="admin-password" style="display:block;margin-bottom:6px;">Password</label>
+                    <input type="password" id="admin-password" style="width:100%;padding:10px;border-radius:6px;border:1px solid #ddd;" required>
+                </div>
+                <button type="submit" style="width:100%;padding:10px 0;border:none;border-radius:6px;background:#4a6fa5;color:white;font-weight:600;cursor:pointer;">Login</button>
+            </form>
+            <div id="login-admin-error" style="color:#e74c3c;text-align:center;margin-top:10px;display:none;"></div>
+            <div style="margin-top:18px;font-size:0.95rem;color:#888;text-align:center;">
+            </div>
+        </div>
+    </div>
+    <script>
+    // Modal login admin
+    function showLoginAdminModal() {
+        document.getElementById('login-admin-modal').style.display = 'flex';
+        document.getElementById('admin-username').value = '';
+        document.getElementById('admin-password').value = '';
+        document.getElementById('login-admin-error').style.display = 'none';
+    }
+    function closeLoginAdminModal() {
+        document.getElementById('login-admin-modal').style.display = 'none';
+    }
+
+    // Status login admin (localStorage)
+    function isAdminLoggedIn() {
+        return localStorage.getItem('isAdmin') === 'true';
+    }
+    function setAdminLogin(status) {
+        localStorage.setItem('isAdmin', status ? 'true' : 'false');
+    }
+
+    // Handle login form
+    document.addEventListener('DOMContentLoaded', function() {
+        document.getElementById('login-admin-form').onsubmit = function(e) {
+            e.preventDefault();
+            const username = document.getElementById('admin-username').value.trim();
+            const password = document.getElementById('admin-password').value;
+            if (username === 'risalaja38@gmail.com' && password === 'SANATENGAH123') {
+                setAdminLogin(true);
+                closeLoginAdminModal();
+                alert('Login admin berhasil!');
+                renderArsip(); // update arsip menu
+            } else {
+                setAdminLogin(false);
+                document.getElementById('login-admin-error').textContent = 'Username atau password salah!';
+                document.getElementById('login-admin-error').style.display = 'block';
+            }
+        };
+    });
+    </script>
+    </body>
+    </html>
+
+<!-- MODIFIKASI PADA MODAL ARSIP DESA: -->
+<!-- Pada bagian renderArsip() dan tombol tambah/edit/hapus arsip, tambahkan pengecekan admin -->
+
+<script>
+// ...fungsi renderArsip sebelumnya...
+function renderArsip(filter = "semua arsip", search = "") {
+    const grid = document.getElementById('arsip-list');
+    grid.innerHTML = "";
+    let filtered = arsipData.filter(item => {
+        let cocokTab = filter === "semua arsip" || item.type.toLowerCase() === filter;
+        let cocokCari = item.title.toLowerCase().includes(search);
+        return cocokTab && cocokCari;
+    });
+    if (filtered.length === 0) {
+        grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;color:#aaa;padding:40px 0;">Tidak ada arsip ditemukan.</div>`;
+        return;
+    }
+    filtered.forEach(item => {
+        let card = document.createElement('div');
+        card.className = "archive-card";
+        card.style = "background-color:white;border-radius:10px;overflow:hidden;box-shadow:0 4px 6px rgba(0,0,0,0.05);transition:all 0.3s ease;position:relative;";
+        let header = "";
+        if (item.type === "Foto") {
+            header = `<div class="card-header" style="height:160px;overflow:hidden;position:relative;">
+                <img src="${item.src}" alt="${item.title}" style="width:100%;height:100%;object-fit:cover;transition:transform 0.5s;">
+                <div class="file-type" style="position:absolute;top:10px;right:10px;background-color:rgba(0,0,0,0.7);color:white;padding:5px 10px;border-radius:20px;font-size:12px;">${item.type}</div>
+            </div>`;
+        } else if (item.type === "Video") {
+            header = `<div class="card-header" style="height:160px;overflow:hidden;position:relative;">
+                <video poster="${item.poster || ''}" controls style="width:100%;height:100%;object-fit:cover;transition:transform 0.5s;">
+                    <source src="${item.src}" type="video/mp4">
+                </video>
+                <div class="file-type" style="position:absolute;top:10px;right:10px;background-color:rgba(0,0,0,0.7);color:white;padding:5px 10px;border-radius:20px;font-size:12px;">${item.type}</div>
+            </div>`;
+        } else {
+            header = `<div class="card-header" style="height:160px;overflow:hidden;position:relative;">
+                <div class="file-icon" style="display:flex;align-items:center;justify-content:center;height:100%;background-color:#f0f4f8;">
+                    <i class="fas ${item.icon || 'fa-file'}" style="font-size:60px;color:#4a6fa5;"></i>
+                </div>
+                <div class="file-type" style="position:absolute;top:10px;right:10px;background-color:rgba(0,0,0,0.7);color:white;padding:5px 10px;border-radius:20px;font-size:12px;">${item.type}</div>
+            </div>`;
+        }
+        // Tombol edit/hapus hanya muncul jika admin login
+        card.innerHTML = `
+            ${header}
+            <div class="card-body" style="padding:15px;">
+                <h3 class="card-title" style="font-weight:600;margin-bottom:8px;color:#343a40;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${item.title}</h3>
+                <div class="card-meta" style="display:flex;justify-content:space-between;font-size:12px;color:#6c757d;margin-bottom:15px;">
+                    <span><i class="far fa-calendar-alt"></i> ${new Date(item.date).toLocaleDateString('id-ID')}</span>
+                    <span><i class="far fa-file"></i> ${item.size}</span>
+                </div>
+                <div class="card-actions" style="display:flex;justify-content:space-between;border-top:1px solid #eee;padding-top:15px;">
+                    <button class="btn-action btn-download" data-id="${item.id}" style="padding:6px 12px;border-radius:5px;font-size:13px;display:inline-flex;align-items:center;background-color:rgba(40,167,69,0.1);color:#28a745;">
+                        <i class="fas fa-download" style="margin-right:5px;"></i> Unduh
+                    </button>
+                    ${isAdminLoggedIn() ? `
+                    <button class="btn-action btn-edit" data-id="${item.id}" style="padding:6px 12px;border-radius:5px;font-size:13px;display:inline-flex;align-items:center;background-color:rgba(255,193,7,0.1);color:#ffc107;">
+                        <i class="fas fa-edit" style="margin-right:5px;"></i> Edit
+                    </button>
+                    <button class="btn-action btn-delete" data-id="${item.id}" style="padding:6px 12px;border-radius:5px;font-size:13px;display:inline-flex;align-items:center;background-color:rgba(220,53,69,0.1);color:#dc3545;">
+                        <i class="fas fa-trash" style="margin-right:5px;"></i> Hapus
+                    </button>
+                    ` : ''}
+                </div>
+            </div>
+        `;
+        grid.appendChild(card);
+    });
+
+    // Event tombol
+    grid.querySelectorAll('.btn-download').forEach(btn => {
+        btn.onclick = function() {
+            const id = +btn.getAttribute('data-id');
+            const arsip = arsipData.find(a => a.id === id);
+            if (arsip && arsip.src) {
+                window.open(arsip.src, '_blank');
+            } else {
+                alert('File tidak tersedia untuk diunduh.');
+            }
+        };
+    });
+    if (isAdminLoggedIn()) {
+        grid.querySelectorAll('.btn-edit').forEach(btn => {
+            btn.onclick = function() {
+                const id = +btn.getAttribute('data-id');
+                const arsip = arsipData.find(a => a.id === id);
+                if (!arsip) return;
+                const newTitle = prompt('Edit judul arsip:', arsip.title);
+                if (!newTitle) return;
+                arsip.title = newTitle;
+                const newSize = prompt('Edit ukuran file:', arsip.size);
+                if (newSize) arsip.size = newSize;
+                saveArsipData(arsipData);
+                renderArsip(currentTab, currentSearch);
+            };
+        });
+        grid.querySelectorAll('.btn-delete').forEach(btn => {
+            btn.onclick = function() {
+                const id = +btn.getAttribute('data-id');
+                if (confirm('Yakin ingin menghapus arsip ini?')) {
+                    arsipData = arsipData.filter(a => a.id !== id);
+                    saveArsipData(arsipData);
+                    renderArsip(currentTab, currentSearch);
+                }
+            };
+        });
+    }
+}
+
+// Tambah Arsip: buka file lokal (hanya admin)
+document.getElementById('arsip-upload-btn').onclick = function() {
+    if (!isAdminLoggedIn()) {
+        alert('Hanya admin yang dapat menambah arsip!');
+        return;
+    }
+    document.getElementById('arsip-file-input').value = '';
+    document.getElementById('arsip-file-input').click();
+};
+</script>
+</html>
